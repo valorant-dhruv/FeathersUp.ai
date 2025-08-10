@@ -1,0 +1,27 @@
+{
+  "name": "feathersup-ticketing-system",
+  "version": "1.0.0",
+  "description": "Full-stack ticketing system with React frontend and Node.js backend",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "start:frontend": "npm start --prefix frontend",
+    "db:migrate": "npm run db:migrate --prefix backend",
+    "db:seed": "npm run db:seed --prefix backend",
+    "db:reset": "npm run db:reset --prefix backend",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:restart": "docker-compose restart"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["ticketing", "react", "nodejs", "express", "postgresql"],
+  "author": "Dhruv Bhaskar Soni",
+  "license": "Apache License 2.0"
+} 

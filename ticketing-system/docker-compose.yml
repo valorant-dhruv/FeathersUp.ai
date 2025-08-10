@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./backend
+    container_name: feathersup_app
+    restart: unless-stopped
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-feathersup_ticketing}
+      - DB_USER=${DB_USER:-feathersup_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules  # Prevent overwriting node_modules
+    networks:
+      - feathersup_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: feathersup_postgres
+    restart: unless-stopped
+    environment:
+      # Use environment variables for security
+      POSTGRES_DB: ${DB_NAME:-feathersup_ticketing}
+      POSTGRES_USER: ${DB_USER:-feathersup_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}  # Must be set in .env
+    # Don't expose port in production
+    ports:
+      - "5432:5432"  # Only expose if needed for development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - feathersup_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-feathersup_user} -d ${DB_NAME:-feathersup_ticketing}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: feathersup_pgadmin
+    restart: unless-stopped
+    environment:
+      # Use environment variables
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@feathersup.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}  # Must be set in .env
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - feathersup_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  feathersup_network:
+    driver: bridge
