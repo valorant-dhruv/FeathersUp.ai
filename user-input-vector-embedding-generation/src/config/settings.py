@@ -1,6 +1,6 @@
 import os
-from typing import List
-from pydantic import Field
+from typing import List, Union
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -24,6 +24,24 @@ class Settings(BaseSettings):
     
     # Logging configuration
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
+    
+    @field_validator('trusted_hosts', 'cors_origins', mode='before')
+    @classmethod
+    def parse_list_fields(cls, v):
+        """Convert string values to lists for trusted_hosts and cors_origins."""
+        if isinstance(v, str):
+            if v == "*":
+                return ["*"]
+            # Try to parse as JSON if it looks like a JSON string
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    import json
+                    return json.loads(v)
+                except:
+                    pass
+            # Split by comma if it's a comma-separated string
+            return [item.strip() for item in v.split(",") if item.strip()]
+        return v
     
     model_config = {
         "env_file": ".env",
