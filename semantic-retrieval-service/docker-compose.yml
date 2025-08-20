@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  semantic-retrieval-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=dev
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=false
+      - LOG_LEVEL=INFO
+      - DEFAULT_MODEL=all-MiniLM-L6-v2
+    volumes:
+      - .:/app
+    restart: unless-stopped
+

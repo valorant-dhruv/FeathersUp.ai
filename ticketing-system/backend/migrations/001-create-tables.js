@@ -111,6 +111,44 @@ module.exports = {
       }
     });
 
+    // Create categories table
+    await queryInterface.createTable('categories', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      name: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+        unique: true
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true
+      },
+      color: {
+        type: Sequelize.STRING(7),
+        allowNull: false,
+        defaultValue: '#007bff'
+      },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      }
+    });
+
     // Create tickets table
     await queryInterface.createTable('tickets', {
       id: {
@@ -136,10 +174,15 @@ module.exports = {
         defaultValue: 'medium',
         allowNull: false
       },
-      category: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-        defaultValue: 'general'
+      category_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'categories',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       },
       customer_id: {
         type: Sequelize.INTEGER,
@@ -207,10 +250,12 @@ module.exports = {
     await queryInterface.addIndex('agents', ['email'], { unique: true });
     await queryInterface.addIndex('agents', ['status']);
     await queryInterface.addIndex('agents', ['is_super_agent']);
+    await queryInterface.addIndex('categories', ['name'], { unique: true });
+    await queryInterface.addIndex('categories', ['is_active']);
     await queryInterface.addIndex('tickets', ['customer_id']);
     await queryInterface.addIndex('tickets', ['status']);
     await queryInterface.addIndex('tickets', ['priority']);
-    await queryInterface.addIndex('tickets', ['category']);
+    await queryInterface.addIndex('tickets', ['category_id']);
     await queryInterface.addIndex('tickets', ['assigned_to']);
     await queryInterface.addIndex('tickets', ['created_at']);
   },
@@ -218,6 +263,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     // Drop tables in reverse order (due to foreign key constraints)
     await queryInterface.dropTable('tickets');
+    await queryInterface.dropTable('categories');
     await queryInterface.dropTable('agents');
     await queryInterface.dropTable('customers');
   }

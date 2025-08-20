@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  semantic-retrieval-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=prod
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=false
+      - LOG_LEVEL=WARNING
+      - DEFAULT_MODEL=all-MiniLM-L6-v2
+      - TRUSTED_HOSTS=localhost,127.0.0.1
+      - CORS_ORIGINS=http://localhost:3000,https://yourdomain.com
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+    # Production security settings
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
