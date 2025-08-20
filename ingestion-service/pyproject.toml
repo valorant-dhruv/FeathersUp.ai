@@ -1,0 +1,17 @@
+[project]
+name = "ingestion-service"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=0.3.27",
+    "langchain-pinecone>=0.2.11",
+    "pinecone-client>=6.0.0",
+    "pypdf>=6.0.0",
+    "python-dotenv>=1.1.1",
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "sentence-transformers>=2.2.2",
+    "langchain-community>=0.3.27",
+]
