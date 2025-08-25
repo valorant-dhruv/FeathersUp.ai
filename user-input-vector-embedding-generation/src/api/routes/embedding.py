@@ -6,6 +6,8 @@ from ...models.embedding import EmbeddingRequest, EmbeddingResponse
 from ...services.embedding_service import EmbeddingService
 
 # Initialize router
+#Prefix is the path that will be used to access the endpoint
+#Tags is the name of the endpoint and is used for documentation purposes in Swagger UI
 router = APIRouter(prefix="/embed", tags=["embeddings"])
 
 # Initialize service

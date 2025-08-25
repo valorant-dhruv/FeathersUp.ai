@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 
 
 class EmbeddingRequest(BaseModel):
-    """Request model for text embedding generation."""
     text: str = Field(..., min_length=1, max_length=10000, description="Text to be embedded")
     
     class Config:
@@ -14,7 +13,6 @@ class EmbeddingRequest(BaseModel):
 
 
 class EmbeddingResponse(BaseModel):
-    """Response model for text embedding generation."""
     embedding: list[float] = Field(..., description="Vector embedding of the input text")
     model_name: str = Field(..., description="Name of the embedding model used")
     text_length: int = Field(..., description="Length of the input text")

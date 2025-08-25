@@ -6,11 +6,7 @@ const ticketValidators = require('../validators/ticketValidators');
 const { handleValidationErrors } = require('../middleware/validation');
 const { protect, authorize } = require('../middleware/auth');
 
-/**
- * @route   GET /tickets
- * @desc    Get all tickets with filtering and pagination
- * @access  Private
- */
+//This route is used to get all tickets with filtering and pagination
 router.get(
   '/',
   ticketValidators.getTickets,
@@ -19,11 +15,7 @@ router.get(
   TicketController.getTickets
 );
 
-/**
- * @route   POST /tickets
- * @desc    Create a new ticket
- * @access  Private
- */
+//This route is used to create a new ticket
 router.post(
   '/',
   ticketValidators.createTicket,
@@ -32,22 +24,14 @@ router.post(
   TicketController.createTicket
 );
 
-/**
- * @route   GET /tickets/stats
- * @desc    Get ticket statistics
- * @access  Private
- */
+//This route is used to get ticket statistics
 router.get(
   '/stats',
   protect,
   TicketController.getTicketStats
 );
 
-/**
- * @route   GET /tickets/queue/next
- * @desc    Get next ticket for agent from their priority queue
- * @access  Private (Agents only)
- */
+//This route is used to get the next ticket for an agent from their priority queue
 router.get(
   '/queue/next',
   protect,
@@ -55,11 +39,7 @@ router.get(
   TicketController.getNextTicket
 );
 
-/**
- * @route   GET /tickets/queue/agent/:agentId?
- * @desc    Get agent's queue status
- * @access  Private (Agents only)
- */
+//This route is used to get an agent's queue status
 router.get(
   '/queue/agent/:agentId?',
   protect,
@@ -67,11 +47,7 @@ router.get(
   TicketController.getAgentQueue
 );
 
-/**
- * @route   GET /tickets/queue/system/stats
- * @desc    Get system-wide queue statistics
- * @access  Private (Super Agents only)
- */
+//This route is used to get system-wide queue statistics
 router.get(
   '/queue/system/stats',
   protect,
@@ -79,11 +55,7 @@ router.get(
   TicketController.getSystemQueueStats
 );
 
-/**
- * @route   GET /tickets/:id
- * @desc    Get ticket by ID
- * @access  Private
- */
+//This route is used to get a ticket by id
 router.get(
   '/:id',
   ticketValidators.ticketId,
@@ -92,11 +64,7 @@ router.get(
   TicketController.getTicketById
 );
 
-/**
- * @route   PUT /tickets/:id
- * @desc    Update ticket
- * @access  Private
- */
+//This route is used to update a ticket
 router.put(
   '/:id',
   ticketValidators.updateTicket,
@@ -105,11 +73,7 @@ router.put(
   TicketController.updateTicket
 );
 
-/**
- * @route   PUT /tickets/:id/assign
- * @desc    Assign ticket to agent
- * @access  Private (Agents only)
- */
+//This route is used to assign a ticket to an agent
 router.put(
   '/:id/assign',
   ticketValidators.assignTicket,
@@ -119,11 +83,7 @@ router.put(
   TicketController.assignTicket
 );
 
-/**
- * @route   PATCH /tickets/:id/complete
- * @desc    Complete ticket and remove from queue
- * @access  Private (Agents only)
- */
+//This route is used to complete a ticket and remove it from the queue
 router.patch(
   '/:id/complete',
   ticketValidators.ticketId,
@@ -133,11 +93,7 @@ router.patch(
   TicketController.completeTicket
 );
 
-/**
- * @route   DELETE /tickets/:id
- * @desc    Delete ticket
- * @access  Private (Owner or Super Agent only)
- */
+//This route is used to delete a ticket
 router.delete(
   '/:id',
   ticketValidators.ticketId,

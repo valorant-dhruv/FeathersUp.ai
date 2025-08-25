@@ -2,6 +2,7 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 //This is the sequelize instance for the database
+//Sequelize is an ORM for Node.js that allows to interact with the database using an object-oriented approach.
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,

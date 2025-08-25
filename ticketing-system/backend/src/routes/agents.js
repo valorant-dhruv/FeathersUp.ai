@@ -6,11 +6,7 @@ const { handleValidationErrors } = require('../middleware/validation');
 const { protect, authorize } = require('../middleware/auth');
 const { body, param } = require('express-validator');
 
-/**
- * @route   POST /agents
- * @desc    Create a new agent
- * @access  Private (Super Agents only)
- */
+//This route is used to create a new agent
 router.post(
   '/',
   [
@@ -25,11 +21,7 @@ router.post(
   AgentController.createAgent
 );
 
-/**
- * @route   GET /agents
- * @desc    Get all agents
- * @access  Private (Agents only)
- */
+//This route is used to get all agents
 router.get(
   '/',
   protect,
@@ -37,11 +29,7 @@ router.get(
   AgentController.getAgents
 );
 
-/**
- * @route   GET /agents/:id
- * @desc    Get agent by ID
- * @access  Private (Agents only)
- */
+//This route is used to get an agent by id
 router.get(
   '/:id',
   [
@@ -53,11 +41,7 @@ router.get(
   AgentController.getAgentById
 );
 
-/**
- * @route   POST /agents/:agentId/categories
- * @desc    Subscribe agent to categories
- * @access  Private (Agents only)
- */
+//This route is used to subscribe an agent to categories
 router.post(
   '/:agentId/categories',
   [
@@ -71,11 +55,7 @@ router.post(
   AgentController.subscribeToCategories
 );
 
-/**
- * @route   DELETE /agents/:agentId/categories
- * @desc    Unsubscribe agent from categories
- * @access  Private (Agents only)
- */
+//This route is used to unsubscribe an agent from categories
 router.delete(
   '/:agentId/categories',
   [
@@ -89,11 +69,7 @@ router.delete(
   AgentController.unsubscribeFromCategories
 );
 
-/**
- * @route   PATCH /agents/:agentId/status
- * @desc    Update agent status
- * @access  Private (Super Agents only)
- */
+//This route is used to update an agent's status
 router.patch(
   '/:agentId/status',
   [

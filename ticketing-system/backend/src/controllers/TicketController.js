@@ -37,6 +37,7 @@ class TicketController {
         ticket: result.ticket,
         assignedAgent: result.assignedAgent,
         queueStats: result.queueStats,
+        embeddingGenerated: result.embeddingGenerated,
         message: result.assignedAgent 
           ? `Ticket created and assigned to ${result.assignedAgent.name}`
           : 'Ticket created and added to pending queue'

@@ -1,6 +1,7 @@
 const { Ticket, Customer, Agent, Category, Comment, Attachment, sequelize } = require('../models');
 const { Op } = require('sequelize');
 const TicketQueueService = require('./TicketQueueService');
+const EmbeddingService = require('./EmbeddingService');
 
 class TicketService {
   /**
@@ -353,6 +354,25 @@ class TicketService {
       const transaction = await sequelize.transaction();
 
       try {
+        // Generate vector embedding for the ticket content
+        const embeddingService = new EmbeddingService();
+        let embedding = null;
+        
+        try {
+          embedding = await embeddingService.generateTicketEmbedding(
+            ticketData.title, 
+            ticketData.description
+          );
+        } catch (embeddingError) {
+          console.warn('Embedding generation failed, continuing without embedding:', embeddingError.message);
+          // Continue without embedding - don't fail ticket creation
+        }
+
+        // Add embedding to ticket data if available
+        if (embedding) {
+          ticketData.embedding = embedding;
+        }
+
         // Create the ticket
         const ticket = await Ticket.create(ticketData, { transaction });
 
@@ -367,7 +387,8 @@ class TicketService {
         return {
           ticket: ticketWithDetails,
           assignedAgent,
-          queueStats: assignedAgent ? TicketQueueService.getAgentQueueStatus(assignedAgent.id) : null
+          queueStats: assignedAgent ? TicketQueueService.getAgentQueueStatus(assignedAgent.id) : null,
+          embeddingGenerated: !!embedding
         };
       } catch (error) {
         await transaction.rollback();

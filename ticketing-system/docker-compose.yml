@@ -14,6 +14,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=${NODE_ENV:-development}
       - PORT=3000
+      - EMBEDDING_API_URL=http://embedding-service:8000/embed
     ports:
       - "3000:3000"
     volumes:
@@ -24,6 +25,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      embedding-service:
+        condition: service_started
 
   postgres:
     image: postgres:15-alpine
@@ -65,6 +68,24 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  embedding-service:
+    build: ../user-input-vector-embedding-generation
+    container_name: feathersup_embedding
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=dev
+      - HOST=0.0.0.0
+      - PORT=8000
+      - RELOAD=false
+      - LOG_LEVEL=INFO
+      - DEFAULT_MODEL=all-MiniLM-L6-v2
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../user-input-vector-embedding-generation:/app
+    networks:
+      - feathersup_network
 
 volumes:
   postgres_data:

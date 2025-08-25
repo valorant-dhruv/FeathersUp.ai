@@ -76,27 +76,30 @@ const startServer = async () => {
     await testConnection();
     
     // Sync database models
-    console.log('🔄 Syncing database models...');
-    await sequelize.sync({ force: true }); // This will drop and recreate all tables
-    console.log('✅ Database models synced successfully!');
+    //force: true will drop and recreate all tables
+    console.log('Syncing database models...');
+    await sequelize.sync({ force: true });
+    console.log('Database models synced successfully!');
     
     // Run seeders to populate initial data
-    console.log('🌱 Running database seeders...');
+    console.log('Running database seeders...');
     await runAllSeeders();
-    console.log('✅ Database seeding completed!');
+    console.log('Database seeding completed!');
     
     // Initialize ticket queue service
-    console.log('🎯 Initializing ticket queue service...');
+    console.log('Initializing ticket queue service...');
     await TicketQueueService.loadAgentQueues();
-    console.log('✅ Ticket queue service initialized!');
+    console.log('Ticket queue service initialized!');
     
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-      console.log('🎯 Pub/Sub ticket queue system is active!');
+      console.log(`Server is running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`Health check: http://localhost:${PORT}/health`);
+      console.log('Pub/Sub ticket queue system is active!');
     });
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }

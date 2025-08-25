@@ -113,6 +113,11 @@ const Ticket = sequelize.define('Ticket', {
     type: DataTypes.DATE,
     allowNull: true,
     field: 'assigned_at'
+  },
+  embedding: {
+    type: DataTypes.JSON,
+    allowNull: true,
+    comment: 'Vector embedding of ticket title and description for semantic search'
   }
 }, {
   tableName: 'tickets',
